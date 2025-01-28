@@ -12,7 +12,7 @@ object Stack {
     * res0: Stack[Int] = Stack(Nil)
     * }}}
     */
-  def apply[A](): Stack[A] = Stack(Nil)
+  def apply[A](): Stack[A] = Stack[A](Nil)
 
   /** Example:
     * {{{
@@ -20,7 +20,7 @@ object Stack {
     * res0: Stack[Int] = Stack(Cons(1, Nil))
     * }}}
     */
-  def apply[A](a: A): Stack[A] = Stack(Link(a))
+  def apply[A](a: A): Stack[A] = Stack[A](Link(a))
 
   /** Example:
       * {{{
@@ -28,7 +28,7 @@ object Stack {
       * res0: Stack[Int] = Stack(Cons(4, Cons(3, Cons(2, Cons(1, Nil)))))
       * }}}
       */
-  def apply[A](as: A*): Stack[A] = Stack {
+  def apply[A](as: A*): Stack[A] = Stack[A] {
     Link[A].prepend(as: _*)
   }
 
@@ -44,6 +44,20 @@ object Stack {
       * }}}
       */
     def push(a: A): Stack[A] = stack.copy(elements = stack.elements.prepend(a))
+
+    /** Example:
+      * {{{
+      * scala> val stack = Stack(1, 2)
+      * stack: Stack[Int] = Stack(Cons(2, Cons(1, Nil)))
+      *
+      * scala> stack.push(Some(3))
+      * res0: Stack[Int] = Stack(Cons(3, Cons(2, Cons(1, Nil))))
+      * }}}
+      */
+    def push(a: Option[A]): Stack[A] = a match {
+      case None          => stack
+      case Some(element) => stack.push(element)
+    }
 
     /** Example:
       * {{{
