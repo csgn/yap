@@ -30,6 +30,20 @@ ThisBuild / scalacOptions ++= Seq(
   "-Wunused",
 )
 
+lazy val benchmarks = project
+  .in(file("benchmarks"))
+  .dependsOn(core)
+  .settings(
+    name := "benchmarks",
+    publish / skip := true,
+    libraryDependencies ++= {
+      Seq(
+        scalameter,
+      )
+    }
+  )
+  .enablePlugins(ScalafixPlugin)
+
 lazy val tests = project
   .in(file("tests"))
   .dependsOn(core)
