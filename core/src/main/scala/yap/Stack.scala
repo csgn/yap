@@ -9,7 +9,7 @@ object Stack {
   /** Example:
     * {{{
     * scala> Stack()
-    * res0: Stack[Int] = Nil
+    * res0: Stack[Int] = Stack(Nil)
     * }}}
     */
   def apply[A](): Stack[A] = Stack(Nil)
@@ -17,15 +17,15 @@ object Stack {
   /** Example:
     * {{{
     * scala> Stack(1)
-    * res0: Stack[Int] = Cons(1, Nil)
+    * res0: Stack[Int] = Stack(Cons(1, Nil))
     * }}}
     */
   def apply[A](a: A): Stack[A] = Stack(Link(a))
 
   /** Example:
       * {{{
-      * scala> Link(1, 2, 3, 4)
-      * res0: Link[Int] = Cons(1, Cons(2, Cons(3, Cons(4, Nil))))
+      * scala> Stack(1, 2, 3, 4)
+      * res0: Stack[Int] = Stack(Cons(4, Cons(3, Cons(2, Cons(1, Nil)))))
       * }}}
       */
   def apply[A](as: A*): Stack[A] = Stack {
@@ -37,10 +37,10 @@ object Stack {
     /** Example:
       * {{{
       * scala> val stack = Stack(1, 2)
-      * stack: Stack[Int] = Cons(2, Cons(1, Nil))
+      * stack: Stack[Int] = Stack(Cons(2, Cons(1, Nil)))
       *
       * scala> stack.push(3)
-      * res0: Stack[Int] = Cons(3, Cons(2, Cons(1, Nil)))
+      * res0: Stack[Int] = Stack(Cons(3, Cons(2, Cons(1, Nil))))
       * }}}
       */
     def push(a: A): Stack[A] = stack.copy(elements = stack.elements.prepend(a))
@@ -48,10 +48,10 @@ object Stack {
     /** Example:
       * {{{
       * scala> val stack = Stack(1, 2, 3)
-      * stack: Stack[Int] = Cons(3, Cons(2, Cons(1, Nil)))
+      * stack: Stack[Int] = Stack(Cons(3, Cons(2, Cons(1, Nil))))
       *
       * scala> stack.pop
-      * res0: Stack[Int] = Cons(2, Cons(1, Nil))
+      * res0: Stack[Int] = Stack(Cons(2, Cons(1, Nil)))
       * }}}
       */
     def pop: (Stack[A], Option[A]) = {
@@ -65,7 +65,7 @@ object Stack {
     /** Example:
       * {{{
       * scala> val stack = Stack(1, 2, 3)
-      * stack: Stack[Int] = Cons(3, Cons(2, Cons(1, Nil)))
+      * stack: Stack[Int] = Stack(Cons(3, Cons(2, Cons(1, Nil))))
       *
       * scala> stack.peek
       * res0: Option[Int] = Some(3)
@@ -76,7 +76,7 @@ object Stack {
     /** Example:
       * {{{
       * scala> val stack = Stack()
-      * stack: Stack[Int] = Nil
+      * stack: Stack[Int] = Stack(Nil)
       *
       * scala> stack.isEmpty
       * res0: Boolean = true
