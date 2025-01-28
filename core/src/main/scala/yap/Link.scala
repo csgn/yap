@@ -7,27 +7,27 @@ object Link {
   case class Cons[+A](head: A, tail: Link[A] = Nil) extends Link[A]
 
   /** Example:
-      * {{{
-      * scala> Link()
-      * res0: Link[Int] = Nil
-      * }}}
-      */
+    * {{{
+    * scala> Link()
+    * res0: Link[Int] = Nil
+    * }}}
+    */
   def apply[A](): Link[A] = Nil
 
   /** Example:
-      * {{{
-      * scala> Link(1)
-      * res0: Link[Int] = Cons(1, Nil)
-      * }}}
-      */
+    * {{{
+    * scala> Link(1)
+    * res0: Link[Int] = Cons(1, Nil)
+    * }}}
+    */
   def apply[A](a: A): Link[A] = Cons(a, Nil)
 
   /** Example:
-      * {{{
-      * scala> Link(1, 2, 3, 4)
-      * res0: Link[Int] = Cons(1, Cons(2, Cons(3, Cons(4, Nil))))
-      * }}}
-      */
+    * {{{
+    * scala> Link(1, 2, 3, 4)
+    * res0: Link[Int] = Cons(1, Cons(2, Cons(3, Cons(4, Nil))))
+    * }}}
+    */
   def apply[A](as: A*): Link[A] = {
     if (as.isEmpty) Nil
     else Cons(as.head, apply(as.tail: _*))
