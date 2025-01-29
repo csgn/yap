@@ -131,4 +131,12 @@ class LinkSuite extends munit.FunSuite {
     val obtained = Link(1, 2, 3, 4, 5).removeAt(0)
     assertEquals(obtained, expected)
   }
+
+  test("should combine two linked list") {
+    val l1 = Link(1, 2, 3)
+    val l2 = Link(4, 5, 6, 7)
+    val expected = Link(5, 7, 9, 7)
+    val obtained = l1.combine(l2)
+    assertEquals(obtained, expected)
+  }
 }

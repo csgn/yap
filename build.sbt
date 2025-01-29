@@ -62,7 +62,12 @@ lazy val core = project
   .in(file("core"))
   .settings(
     name := "core",
-    moduleName := "yap-core"
+    moduleName := "yap-core",
+    libraryDependencies ++= {
+      Seq(
+        cats,
+      )
+    }
   )
   .enablePlugins(ScalafixPlugin)
 

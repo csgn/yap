@@ -1,5 +1,7 @@
 package yap
 
+import cats.kernel.Monoid
+
 trait Link[+A]
 
 object Link {
@@ -33,8 +35,27 @@ object Link {
     else Cons(as.head, apply(as.tail: _*))
   }
 
-  def nil: Link[Nothing] = Nil
-  def cons[A](head: A, tail: Link[A] = Nil): Link[A] = Cons(head, tail)
+  implicit def numericLinkMonoid[T: Numeric]: Monoid[Link[T]] = new Monoid[Link[T]] {
+    def empty: Link[T] = Link[T]
+    def combine(l1: Link[T], l2: Link[T]): Link[T] = (l1, l2) match {
+      case (Nil, Nil)                  => Nil
+      case (Cons(l1Head, l1Tail), Nil) => Cons(l1Head, combine(l1Tail, Nil))
+      case (Nil, Cons(l2Head, l2Tail)) => Cons(l2Head, combine(Nil, l2Tail))
+      case (Cons(l1Head, l1Tail), Cons(l2Head, l2Tail)) =>
+        Cons(Numeric[T].plus(l1Head, l2Head), combine(l1Tail, l2Tail))
+    }
+  }
+
+  implicit def stringLinkMonoid: Monoid[Link[String]] = new Monoid[Link[String]] {
+    def empty: Link[String] = Link[String]
+    def combine(l1: Link[String], l2: Link[String]): Link[String] = (l1, l2) match {
+      case (Nil, Nil)                  => Nil
+      case (Cons(l1Head, l1Tail), Nil) => Cons(l1Head, combine(l1Tail, Nil))
+      case (Nil, Cons(l2Head, l2Tail)) => Cons(l2Head, combine(Nil, l2Tail))
+      case (Cons(l1Head, l1Tail), Cons(l2Head, l2Tail)) =>
+        Cons(l1Head + l2Head, combine(l1Tail, l2Tail))
+    }
+  }
 
   implicit class LinkOps[A](l1: Link[A]) {
 
@@ -347,6 +368,22 @@ object Link {
     def isEmpty: Boolean = l1 match {
       case Cons(_, _) => false
       case Nil        => true
+    }
+
+    /** Example:
+      * {{{
+      * scala> val l1 = Link(1, 2, 3)
+      * l1: Link[Int] = Cons(1, Cons(2, Cons(3, Nil)))
+      *
+      * scala> val l2 = Link(4, 5, 6, 7)
+      * l2: Link[Int] = Cons(4, Cons(5, Cons(6, Cons(7, Nil))))
+      *
+      * scala> l1.combine(l2)(intLinkMonoid)
+      * res0: Link[A] = Cons(5, Cons(7, Cons(9, Cons(7, Nil))))
+      * }}}
+      */
+    def combine(l2: Link[A])(implicit F: Monoid[Link[A]]): Link[A] = {
+      F.combine(l1, l2)
     }
   }
 }
